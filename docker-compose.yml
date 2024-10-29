@@ -1,48 +1,41 @@
-version: '3.1'
-services:
-  db:
-    image: mysql
-    container_name: mysqldb
-    restart: unless-stopped
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: intership
-    networks:
-      mynetwork:
-        ipv4_address: 172.18.0.2  # Specify the desired fixed IP address
+version: "3.8"
 
-  back:
+services:
+  mysqldb:
+    image: mysql:5.6
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: intership
+    ports:
+      - "3313:3306"
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
     depends_on:
-      - db
-    build: ./
+      - mysqldb
+    image: islemamor01/intership:latest
     restart: on-failure
     ports:
-      - "8083:8089"
-    volumes:
-      - .m2:/root/.m2
+      - "8089:8089"
     environment:
       SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:mysql://mysqldb:3306/intership?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
-        "spring.datasource.username" : "root",
-        "spring.datasource.password" : "root",
-        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL8Dialect",
-        "spring.jpa.hibernate.ddl-auto" : "update"
+        "spring.datasource.url": "jdbc:mysql://mysqldb:3306/intership?createDatabaseIfNotExist=true",
+        "spring.datasource.username": "root",
+        "spring.datasource.password": "",
+        "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL5InnoDBDialect",
+        "spring.jpa.hibernate.ddl-auto": "update"
       }'
+    volumes:
+      - .m2:/root/.m2
     stdin_open: true
     tty: true
-    networks:
-      mynetwork:
-        ipv4_address: 172.18.0.3  # Specify a different fixed IP address
 
 volumes:
   db:
-
-networks:
-  mynetwork:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.18.0.0/16
