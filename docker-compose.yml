@@ -22,7 +22,7 @@ services:
   app:
     depends_on:
       - mysqldb
-    image: islemamor01/intership:latest
+    build: ./
     restart: on-failure
     ports:
       - "8089:8089"
