@@ -8,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: intership
     ports:
-      - "3313:3306"
+      - "3306:3306"
     volumes:
       - db:/var/lib/mysql
     healthcheck:
