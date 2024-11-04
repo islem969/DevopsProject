@@ -33,9 +33,10 @@ public class ServiseOffreS implements IServiceOffreS {
         for (Long techId : technologyIds) {
             Technologies technology = technologiesRepository.findById(techId).orElse(null);
             if (technology != null) {
-                offre.getTechnologiess().add(technology);
+                offre.getTechnologies().add(technology);  // Utilisez getTechnologies() au lieu de getTechnologiess()
             }
         }
+
         return offreRepository.save(offre);
     }
 

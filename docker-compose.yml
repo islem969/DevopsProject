@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   mysqldb:
     image: mysql:5.7
@@ -16,9 +14,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      mynetwork:
-        ipv4_address: 172.18.0.2  # Specify the desired fixed IP address
+      #networks:
+        #mynetwork:
+      #ipv4_address: 172.18.0.2  # Specify the desired fixed IP address
   app:
     depends_on:
       - mysqldb
@@ -32,16 +30,16 @@ services:
 
     stdin_open: true
     tty: true
-    networks:
-      mynetwork:
-        ipv4_address: 172.18.0.3  # Specify a different fixed IP address
+      # networks:
+      #mynetwork:
+    # ipv4_address: 172.18.0.3  # Specify a different fixed IP address
 
 volumes:
   db:
-networks:
-  mynetwork:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.18.0.0/16
+#networks:
+    # mynetwork:
+    #driver: bridge
+    #ipam:
+    # driver: default
+    # config:
+  #   - subnet: 172.18.0.0/16

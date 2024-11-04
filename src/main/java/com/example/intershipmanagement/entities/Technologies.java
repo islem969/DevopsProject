@@ -26,5 +26,10 @@ public class Technologies implements Serializable {
 
     @ManyToMany(mappedBy = "technologiess")
     private Set<OffresStages> offresstagess = new HashSet<>();
-
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
