@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
 
 services:
   mysqldb:
@@ -17,13 +17,12 @@ services:
       retries: 5
     networks:
       mynetwork:
-        ipv4_address: 172.19.0.2  # Nouvelle adresse IP pour MySQL
+        ipv4_address: 172.19.0.2  # Adresse IP pour MySQL
 
   app:
     depends_on:
       - mysqldb
     build: ./
-    # image: islemamor01/intership:latest
     restart: on-failure
     ports:
       - "8089:8089"
@@ -33,7 +32,7 @@ services:
     tty: true
     networks:
       mynetwork:
-        ipv4_address: 172.19.0.3  # Nouvelle adresse IP pour l'application
+        ipv4_address: 172.19.0.3  # Adresse IP pour l'application
 
 volumes:
   db:
@@ -44,4 +43,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.19.0.0/16  # Nouvelle plage IP pour éviter les conflits
+        - subnet: 172.19.0.0/16  # Plage IP pour éviter les conflits
