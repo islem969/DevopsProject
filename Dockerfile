@@ -1,4 +1,4 @@
 FROM openjdk:17-jdk-alpine
 EXPOSE 8089
-ADD target/IntershipManagement-0.0.1.jar IntershipManagement-0.0.1.jar
-ENTRYPOINT ["java","-jar","IntershipManagement-0.0.1.jar"]
+ADD target/IntershipManagement-0.0.1-SNAPSHOT.jar IntershipManagement.jar
+ENTRYPOINT ["java", "-jar", "IntershipManagement.jar"]
