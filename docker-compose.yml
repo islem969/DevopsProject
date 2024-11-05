@@ -15,9 +15,7 @@ services:
   app-timesheet:
     depends_on:
       - mysqldb
-    build:
-      context: .  # Builds from the local Dockerfile
-      dockerfile: Dockerfile
+    image: islemamor01/amorbackend:latest
     restart: on-failure
     ports:
       - "8089:8089"
