@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: intership_db  # Update with your database name
+      MYSQL_DATABASE: intership  # Update with your database name
     ports:
       - "3308:3306"  # Corrected port mapping for MySQL
     volumes:
@@ -22,7 +22,7 @@ services:
     environment:
       SPRING_APPLICATION_JSON: >-
         {
-          "spring.datasource.url": "jdbc:mysql://mysqldb:3306/intership_db?createDatabaseIfNotExist=true",
+          "spring.datasource.url": "jdbc:mysql://mysqldb:3306/intership?createDatabaseIfNotExist=true",
           "spring.datasource.username": "root",
           "spring.datasource.password": "root",  # Replace with actual secure password
           "spring.jpa.hibernate.ddl-auto": "update"
