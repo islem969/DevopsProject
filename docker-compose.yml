@@ -21,8 +21,11 @@ services:
        # ipv4_address: 172.18.0.2  # Specify the desired fixed IP address
   app:
     depends_on:
-      - mysqldb
+       mysqldb:
+         condition: service_healthy
+
     build: Dockerfile
+
 
    ## image: islemamor01/intership:latest
     restart: on-failure
