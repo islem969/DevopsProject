@@ -3,7 +3,7 @@ version: "3.8"
 services:
   mysqldb:
     image: mysql
-    #restart: unless-stopped
+    restart: unless-stopped
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: intership
