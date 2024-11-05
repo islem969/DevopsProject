@@ -23,13 +23,13 @@ services:
     depends_on:
        - mysqldb
 
-    build: ./
+    ##build: ./
 
 
-   ## image: islemamor01/intership:latest
+    image: islemamor01/intership:latest
    # restart: on-failure
     ports:
-      - "8086:8086"
+      - "8089:8089"
     volumes:
       - .m2:/root/.m2
 
