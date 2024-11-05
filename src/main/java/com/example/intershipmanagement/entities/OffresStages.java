@@ -34,14 +34,16 @@ public class OffresStages implements Serializable {
     String etat;
     @OneToMany(cascade = CascadeType.ALL, mappedBy="offresstages")
     private Set<Demandes> Demandess ;
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "offres_technologies",
+    @ManyToMany
+    @JoinTable(
+            name = "offres_technologies",
             joinColumns = @JoinColumn(name = "offre_id"),
-            inverseJoinColumns = @JoinColumn(name = "technologie_id"))
-    private Set<Technologies> technologies = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "technology_id")
+    )
+    private Set<Technologies> technologiess = new HashSet<>();
 
     public Set<Technologies> getTechnologies() {
-        return technologies;
+        return technologiess;
     }
 
     public void setIdoff(Long idoff) {
@@ -49,7 +51,7 @@ public class OffresStages implements Serializable {
     }
 
     public void setTechnologies(Set<Technologies> technologies) {
-        this.technologies = technologies;
+        this.technologiess = technologies;
     }
 
     public void setNomE(String nomE) {
