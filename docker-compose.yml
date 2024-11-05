@@ -1,34 +1,41 @@
-version: "3.9"
+version: "3.8"
 
 services:
   mysqldb:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: intership  # Update with your database name
+      MYSQL_ROOT_PASSWORD: "root"  # Définissez un mot de passe pour root
+      MYSQL_DATABASE: intership
     ports:
-      - "3308:3306"  # Corrected port mapping for MySQL
+      - "3313:3306"
     volumes:
       - db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  app-timesheet:
+  app:
     depends_on:
       - mysqldb
     image: islemamor01/amorbackend:latest
     restart: on-failure
     ports:
-      - "8089:8089"
+      - "8090:8090"
     environment:
-      SPRING_APPLICATION_JSON: >-
-        {
-          "spring.datasource.url": "jdbc:mysql://mysqldb:3306/intership?createDatabaseIfNotExist=true",
-          "spring.datasource.username": "root",
-          "spring.datasource.password": "root",  # Replace with actual secure password
-          "spring.jpa.hibernate.ddl-auto": "update"
-        }
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url": "jdbc:mysql://mysqldb:3306/intership?createDatabaseIfNotExist=true",
+        "spring.datasource.username": "root",
+        "spring.datasource.password": "root",
+        "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL8Dialect",
+        "spring.jpa.hibernate.ddl-auto": "update"
+      }'
+    volumes:
+      - .m2:/root/.m2
     stdin_open: true
     tty: true
 
 volumes:
-  db:
+  db:  # Correction de la syntaxe
