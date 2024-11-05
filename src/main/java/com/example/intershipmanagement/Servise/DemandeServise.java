@@ -11,17 +11,15 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.List;
-
 
 @AllArgsConstructor
 @Slf4j
 @Service
 public class DemandeServise implements IServiseDemande {
-    DemandesRepository demandesRepository;
 
-   private  JavaMailSender javaMailSender;
+    private final DemandesRepository demandesRepository;
+    private JavaMailSender javaMailSender;
 
     @Autowired
     public void EmailService(JavaMailSender javaMailSender) {
@@ -31,58 +29,77 @@ public class DemandeServise implements IServiseDemande {
     @Override
     public Demandes ajouterdemandes(Demandes demandes) {
         demandes.setEtat("En Court");
+        log.info("Ajout d'une nouvelle demande avec les informations : {}", demandes);
         return demandesRepository.save(demandes);
     }
 
     @Override
     public List<Demandes> getAlldemandes() {
+        log.info("Récupération de toutes les demandes");
         return (List<Demandes>) demandesRepository.findAll();
     }
 
     @Override
     public Demandes getdemandesById(long id) {
-        return demandesRepository.findById(id).get();
+        log.info("Récupération de la demande avec ID : {}", id);
+        return demandesRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Demande avec ID {} non trouvée", id);
+                    return new EntityNotFoundException("Demande non trouvée");
+                });
     }
 
     @Override
     public void deletedemandes(long id) {
+        log.info("Suppression de la demande avec ID : {}", id);
         demandesRepository.deleteById(id);
     }
 
-
     @Transactional
     public void acceptDemande(long id) {
+        log.info("Acceptation de la demande avec ID : {}", id);
         Demandes demande = demandesRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
-        demande.setEtat("ACCEPATER");
+                .orElseThrow(() -> {
+                    log.error("Demande avec ID {} non trouvée pour acceptation", id);
+                    return new EntityNotFoundException("Demande non trouvée");
+                });
+        demande.setEtat("ACCEPTER");
         demandesRepository.save(demande);
-    }
-    @Transactional
-    public void refuserDemande(long id) {
-        Demandes demande = demandesRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
-        demande.setEtat("REFUSER");
-        demandesRepository.save(demande);
-    }
-    @Override
-    public void sendEmailNotification(Demandes demande) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("dahmaninajwa20@gmail.com");
-        message.setSubject("demand de stage");
-        message.setText("Form Data:\n" + demande.toString());
-       javaMailSender.send(message);
+        log.info("Demande avec ID {} acceptée", id);
     }
 
-@Override
+    @Transactional
+    public void refuserDemande(long id) {
+        log.info("Refus de la demande avec ID : {}", id);
+        Demandes demande = demandesRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Demande avec ID {} non trouvée pour refus", id);
+                    return new EntityNotFoundException("Demande non trouvée");
+                });
+        demande.setEtat("REFUSER");
+        demandesRepository.save(demande);
+        log.info("Demande avec ID {} refusée", id);
+    }
+
+    @Override
+    public void sendEmailNotification(Demandes demande) {
+        log.info("Envoi d'un email de notification pour la demande : {}", demande);
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo("dahmaninajwa20@gmail.com");
+        message.setSubject("Demande de stage");
+        message.setText("Form Data:\n" + demande.toString());
+        javaMailSender.send(message);
+    }
+
+    @Override
     public List<Demandes> findByEtat(String etat) {
+        log.info("Filtrage des demandes par état : {}", etat);
         return demandesRepository.findByEtat(etat);
     }
 
-
     @Override
     public Demandes updatedemandes(Demandes demandes) {
+        log.info("Mise à jour de la demande avec ID : {}", demandes.getId());
         return demandesRepository.save(demandes);
     }
-
-
 }

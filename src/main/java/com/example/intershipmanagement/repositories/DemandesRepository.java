@@ -11,4 +11,5 @@ import java.util.List;
 public interface DemandesRepository extends CrudRepository<Demandes,Long> {
 //List<Demandes>findByidoff(Long idoff);
     List<Demandes> findByEtat(String etat);
+
 }
