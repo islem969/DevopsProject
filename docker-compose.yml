@@ -24,18 +24,18 @@ services:
        mysqldb:
          condition: service_healthy
 
-    build: Dockerfile
+    build: ./
 
 
    ## image: islemamor01/intership:latest
-    restart: on-failure
+   # restart: on-failure
     ports:
       - "8089:8089"
     volumes:
       - .m2:/root/.m2
 
-    stdin_open: true
-    tty: true
+    #stdin_open: true
+   # tty: true
     # networks:
      # mynetwork:
       #  ipv4_address: 172.18.0.3  # Specify a different fixed IP address
